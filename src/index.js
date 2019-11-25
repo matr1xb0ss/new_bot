@@ -1,11 +1,26 @@
 const TelegramBot = require('node-telegram-bot-api');
+const mongoose = require('mongoose');
 const config = require('./config');
 const helper = require('./helper');
 const KB = require('./keyboardButtons');
 const keyboard = require('./keyboard');
+const database = require('./database.json');
 
 helper.logStart();
 
+// Connecting DB
+mongoose.connect(config.DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Database was connected successfully'))
+    .catch((error) => console.warn(error));
+
+require('./models/film.model');
+
+const Film = mongoose.model('films');
+
+database.films.forEach(film => new Film(film).save())
+
+
+// Initiating a BOT
 const bot = new TelegramBot(config.TOKEN, {
     polling: true
 });
@@ -23,6 +38,12 @@ bot.on('message', (msg) => {
                 }
             });
             break;
+        case KB.film.comedy:
+            sendFilmsByQuery(chatId, { type: 'comedy' })
+        case KB.film.action:
+            sendFilmsByQuery(chatId, { type: 'action' })
+        case KB.film.random:
+            sendFilmsByQuery(chatId, {});
         case KB.home.cinemas:
             break;
 
@@ -48,3 +69,7 @@ bot.onText(/\/start/, (msg) => {
     bot.sendMessage(chatId, welcomeText, chatKeyboard);
 
 })
+
+const sendFilmsByQuery = (chatId, query) => {
+    Film.find(query).then(films => console.log(films))
+}
