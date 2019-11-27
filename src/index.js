@@ -17,7 +17,8 @@ require('./models/film.model');
 
 const Film = mongoose.model('films');
 
-database.films.forEach(film => new Film(film).save())
+// Populate DB
+// database.films.forEach(film => new Film(film).save())
 
 
 // Initiating a BOT
@@ -40,13 +41,15 @@ bot.on('message', (msg) => {
             break;
         case KB.film.comedy:
             sendFilmsByQuery(chatId, { type: 'comedy' })
+            break;
         case KB.film.action:
             sendFilmsByQuery(chatId, { type: 'action' })
+            break;
         case KB.film.random:
             sendFilmsByQuery(chatId, {});
+            break;
         case KB.home.cinemas:
             break;
-
         case KB.back:
             bot.sendMessage(chatId, 'What would you like to watch?', {
                 reply_markup: {
@@ -71,5 +74,25 @@ bot.onText(/\/start/, (msg) => {
 })
 
 const sendFilmsByQuery = (chatId, query) => {
-    Film.find(query).then(films => console.log(films))
+    Film.find(query).then(films => {
+        const html = films.map(({ name, uuid }, index) => {
+            return `<b>${index + 1}</b> ${name} - /f${uuid}`;
+        }).join('\n');
+
+        sendHTML(chatId, html, 'films');
+    })
+};
+
+const sendHTML = (chatId, html, kbName) => {
+    const options = {
+        parse_mode: 'HTML'
+    };
+
+    if (kbName) {
+        options['reply_markup'] = {
+            keyboard: keyboard[kbName]
+        }
+    }
+
+    bot.sendMessage(chatId, html, options);
 }
