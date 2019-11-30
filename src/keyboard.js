@@ -11,4 +11,13 @@ module.exports = {
         [KB.film.action, KB.film.comedy],
         [KB.back]
     ],
+    cinemas: [
+        [
+            {
+                text: 'Відправити місцезнаходження',
+                request_location: true
+            }
+        ],
+        [KB.back]
+    ]
 }

@@ -9,5 +9,5 @@ module.exports = {
         action: 'Action',
         comedy: 'Comedy'
     },
-    back: 'Back'
+    back: 'Go Back'
 }

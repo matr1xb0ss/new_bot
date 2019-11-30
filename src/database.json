@@ -2,15 +2,28 @@
     "films": [
         {
             "uuid": "f123",
-            "name": "Menace 2 society",
+            "name": "Menace II society",
             "type": "action",
             "year": "2010",
             "rate": 8.665,
             "length": "2:28",
             "country": "USA",
-            "link": "",
-            "picture": "",
-            "cinemas": ["c123", "c124"]
+            "link": "https://planetakino.ua/movies/frozen-2/#today",
+            "picture": "https://i.pinimg.com/originals/0f/72/2b/0f722b33da03004ec4a5519f3c7569dd.jpg",
+            "language": "українська",
+            "cinemas": ["c123"]
+        }
+    ],
+    "cinemas": [
+        {
+            "uuid": "c123",
+            "name": "Planeta Kino",
+            "url": "https://planetakino.ua/",
+            "location": {
+                "latitude": 49.8499,
+                "longitude": 24.0223
+            },
+            "films": ["f123"]
         }
     ]
 }
